@@ -115,10 +115,10 @@ class DocumentQA:
                     system="You answer questions strictly from the supplied document extracts.",
                     max_tokens=900,
                 )
-                return {"answer": text, "sources": [p for p, _ in passages], "engine": "Claude"}
+                return {"answer": text, "sources": [p for p, _ in passages], "engine": "AI Engine"}
             except Exception as exc:
                 result = self._local_answer(question, passages)
-                result["engine"] = f"Local retrieval (Claude call failed: {exc})"
+                result["engine"] = f"Local retrieval (AI call failed: {exc})"
                 return result
 
         return self._local_answer(question, passages)

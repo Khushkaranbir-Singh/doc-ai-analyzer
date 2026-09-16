@@ -1,25 +1,29 @@
 # Doc AI Analyzer
 
+**Developed by Khushkaranbir Singh**
+
+🔗 **Live app:** https://doc-ai-analyzer.streamlit.app/
+
 Upload a document and understand it in one place: counts and readability, a summary you can
 question, charts of the language inside, and a PDF report you can take away.
 
 Built with Python and Streamlit. It runs with no API key at all — summaries and answers come
-from a local ranking and retrieval engine. Add an Anthropic key and Claude writes them instead.
+from a local ranking and retrieval engine. Add an API key and the AI engine writes them instead.
 
 ---
 
 ## Features
 
-| Feature | What it does |
-|---|---|
-| Uploads | PDF, DOC, DOCX, TXT, MD, JPG, JPEG, PNG, EXE — up to **100 MB** per file |
-| Word count | Words, unique words, characters, sentences, paragraphs, pages, reading and speaking time |
-| Summary | Overview plus key-point bullets, at three lengths (short, medium, detailed) |
-| Q&A | Ask the file anything; every answer shows the passages it was drawn from |
-| Visuals | One button renders frequency bars, a share donut, repeated phrases, sentence-length histogram, words-per-page area chart, a readability gauge, sentence rhythm, a word cloud and a downloadable term table |
-| PDF export | A formatted report: summary, key points, statistics table, term chart, file details, and optionally your Q&A history |
-| OCR | Text is read out of images with Tesseract |
-| Executables | Inspected, never run — file identity, entropy and readable strings only |
+| Feature     | What it does                                                                                                                                                                                               |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Uploads     | PDF, DOC, DOCX, TXT, MD, JPG, JPEG, PNG, EXE — up to **100 MB** per file                                                                                                                                   |
+| Word count  | Words, unique words, characters, sentences, paragraphs, pages, reading and speaking time                                                                                                                   |
+| Summary     | Overview plus key-point bullets, at three lengths (short, medium, detailed)                                                                                                                                |
+| Q&A         | Ask the file anything; every answer shows the passages it was drawn from                                                                                                                                   |
+| Visuals     | One button renders frequency bars, a share donut, repeated phrases, sentence-length histogram, words-per-page area chart, a readability gauge, sentence rhythm, a word cloud and a downloadable term table |
+| PDF export  | A formatted report: summary, key points, statistics table, term chart, file details, and optionally your Q&A history                                                                                       |
+| OCR         | Text is read out of images with Tesseract                                                                                                                                                                  |
+| Executables | Inspected, never run — file identity, entropy and readable strings only                                                                                                                                    |
 
 ---
 
@@ -46,7 +50,7 @@ For OCR on images, install Tesseract on your machine:
 
 Everything else works without it.
 
-### Optional: connect Claude
+### Optional: connect an AI engine
 
 Create `.streamlit/secrets.toml` (already git-ignored):
 
@@ -55,7 +59,7 @@ ANTHROPIC_API_KEY = "sk-ant-..."
 ANTHROPIC_MODEL = "claude-sonnet-5"
 ```
 
-The sidebar shows whether Claude is connected. Without a key the app stays fully usable.
+The sidebar shows whether the AI engine is connected. Without a key the app stays fully usable.
 
 ---
 
@@ -99,7 +103,7 @@ Create the empty repository on github.com first, without a README, so the push i
 1. Push to GitHub.
 2. On [render.com](https://render.com): **New → Web Service → Build and deploy from a Git repository**.
 3. Pick the repository. Render reads `render.yaml`, so runtime and health check are already set.
-4. Add `ANTHROPIC_API_KEY` under **Environment** if you want Claude.
+4. Add `ANTHROPIC_API_KEY` under **Environment** if you want the AI-enhanced engine.
 5. Deploy. Your live URL is `https://doc-ai-analyzer.onrender.com`.
 
 ### Hugging Face Spaces
@@ -124,10 +128,10 @@ doc-ai-analyzer/
 ├── core/
 │   ├── extract.py          Readers for PDF, Word, text, images (OCR), executables
 │   ├── analyze.py          Counts, keywords, phrases, Flesch readability
-│   ├── summarize.py        TextRank ranking + Claude abstractive summary
+│   ├── summarize.py        TextRank ranking + AI abstractive summary
 │   ├── qa.py               Chunking, TF-IDF retrieval with stemming, answers
 │   ├── report.py           ReportLab PDF report
-│   └── llm.py              Optional Anthropic client
+│   └── llm.py              Optional AI engine client
 ├── tests_smoke.py          End-to-end check of the engine
 ├── requirements.txt        Python dependencies
 ├── packages.txt            System packages for Streamlit Cloud (Tesseract)
@@ -141,7 +145,7 @@ Text extraction runs per format — page by page for PDFs, paragraphs and tables
 OCR for images, printable strings for executables.
 
 Summarising builds a similarity graph over the document's sentences and runs PageRank across
-it, so the sentences that sit at the centre of the document rise to the top. With a Claude key
+it, so the sentences that sit at the centre of the document rise to the top. With an API key
 the same text goes to the API for an abstractive summary, and the local engine becomes the
 fallback if the call fails.
 

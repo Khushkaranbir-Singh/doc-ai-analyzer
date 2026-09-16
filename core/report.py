@@ -105,7 +105,7 @@ def _footer(canvas, doc):
     canvas.setFillColor(MUTED)
     canvas.setStrokeColor(RULE)
     canvas.line(20 * mm, 15 * mm, A4[0] - 20 * mm, 15 * mm)
-    canvas.drawString(20 * mm, 10 * mm, "Doc AI Analyzer")
+    canvas.drawString(20 * mm, 10 * mm, "Doc AI Analyzer · Developed by Khushkaranbir Singh")
     canvas.drawRightString(A4[0] - 20 * mm, 10 * mm, f"Page {doc.page}")
     canvas.restoreState()
 

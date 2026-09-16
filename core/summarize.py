@@ -101,7 +101,7 @@ def ai_summary(text: str, length: str = "Medium") -> Dict[str, object]:
             for line in raw[marker:].splitlines()[1:]
             if line.strip().startswith(("-", "•", "*"))
         ]
-    return {"overview": overview.strip(), "bullets": bullets, "engine": "Claude"}
+    return {"overview": overview.strip(), "bullets": bullets, "engine": "AI Engine"}
 
 
 def build_summary(text: str, length: str = "Medium", use_ai: bool = True) -> Dict[str, object]:
@@ -117,7 +117,7 @@ def build_summary(text: str, length: str = "Medium", use_ai: bool = True) -> Dic
                 return result
         except Exception as exc:
             fallback = _extractive_result(text, sentence_budget)
-            fallback["engine"] = f"Local ranking (Claude call failed: {exc})"
+            fallback["engine"] = f"Local ranking (AI call failed: {exc})"
             return fallback
 
     return _extractive_result(text, sentence_budget)

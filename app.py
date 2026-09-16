@@ -119,6 +119,14 @@ def inject_css() -> None:
         }}
         .stTabs [data-baseweb="tab-list"] {{ gap: 26px; border-bottom: 1px solid {PALETTE['rule']}; }}
         .stTabs [data-baseweb="tab"] {{ padding: 8px 0; font-size: 15px; }}
+        [data-testid="stExpander"] {{
+            background: {PALETTE['surface']}; border: 1px solid {PALETTE['rule']};
+            border-radius: 4px; margin-bottom: 16px;
+        }}
+        [data-testid="stExpander"] summary {{
+            font-family: 'Instrument Serif', Georgia, serif; font-size: 20px;
+            padding: 14px 20px;
+        }}
         [data-testid="stSidebar"] {{ background: {PALETTE['surface']}; border-right: 1px solid {PALETTE['rule']}; }}
         footer, #MainMenu {{ visibility: hidden; }}
         </style>
@@ -260,7 +268,7 @@ def tab_overview(doc, stats) -> None:
 def tab_summary(doc, stats, length, use_ai) -> None:
     st.markdown("### Summary")
     st.caption(
-        "Claude writes the summary when an API key is configured. Without one, the app ranks "
+        "The AI engine writes the summary when an API key is configured. Without one, the app ranks "
         "the document's own sentences and returns the most central ones."
     )
 
@@ -524,7 +532,8 @@ def main() -> None:
     st.markdown(
         "<div class='masthead'><h1>Doc AI Analyzer</h1>"
         "<p>Upload a PDF, Word file, image or executable. Get a summary you can question, "
-        "charts of what is inside, and a report you can take away.</p></div>",
+        "charts of what is inside, and a report you can take away.</p>"
+        "<p class='meta' style='margin-top:10px'>Developed by Khushkaranbir Singh</p></div>",
         unsafe_allow_html=True,
     )
 
@@ -533,13 +542,13 @@ def main() -> None:
         length = st.select_slider("Summary length", options=["Short", "Medium", "Detailed"],
                                   value="Medium")
         ai_ready = llm.ai_available()
-        use_ai = st.toggle("Use Claude when available", value=ai_ready, disabled=not ai_ready)
+        use_ai = st.toggle("Use AI-enhanced engine", value=ai_ready, disabled=not ai_ready)
         if ai_ready:
-            st.success(f"Claude connected · {llm.get_model()}")
+            st.success("AI engine connected")
         else:
             st.info(
-                "Running on the built-in engine. Add ANTHROPIC_API_KEY to secrets for "
-                "Claude-written summaries and answers."
+                "Running on the built-in engine. Add an API key in secrets for "
+                "AI-enhanced summaries and answers."
             )
 
         st.markdown("---")
@@ -549,6 +558,8 @@ def main() -> None:
             f"Up to **{MAX_FILE_MB} MB** per file."
         )
         st.caption("Files are processed in memory for this session only. Executables are never run.")
+        st.markdown("---")
+        st.caption("Developed by Khushkaranbir Singh")
 
         if st.session_state.doc and st.button("Clear this file"):
             for key in ("doc", "stats", "summary", "qa_engine", "file_key", "pdf_bytes"):
@@ -584,18 +595,27 @@ def main() -> None:
     if doc.kind == "binary":
         st.warning("This is an executable. You are seeing its identity and readable strings only.")
 
-    overview, summary, questions, visuals, export = st.tabs(
-        ["Overview", "Summary", "Ask questions", "Visuals", "Export PDF"]
-    )
-    with overview:
+    section_titles = {
+        "overview": "① Overview",
+        "summary": "② Summary",
+        "questions": "③ Ask questions",
+        "visuals": "④ Visuals",
+        "export": "⑤ Export PDF",
+    }
+
+    with st.expander(section_titles["overview"], expanded=True):
         tab_overview(doc, stats)
-    with summary:
+
+    with st.expander(section_titles["summary"], expanded=True):
         tab_summary(doc, stats, length, use_ai)
-    with questions:
+
+    with st.expander(section_titles["questions"], expanded=True):
         tab_qa(doc, use_ai)
-    with visuals:
+
+    with st.expander(section_titles["visuals"], expanded=True):
         tab_visuals(doc, stats)
-    with export:
+
+    with st.expander(section_titles["export"], expanded=True):
         tab_export(doc, stats, length, use_ai)
 
 
