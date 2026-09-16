@@ -25,7 +25,7 @@ PALETTE = {
     "paper": "#EEF2F6",
     "surface": "#FFFFFF",
     "ink": "#16222E",
-    "muted": "#5C6B7A",
+    "muted": "#040404",
     "rule": "#D8DEE6",
     "accent": "#2F4BFF",
     "teal": "#0F8B8D",
@@ -155,8 +155,8 @@ def styled_figure(fig, height: int = 380):
         colorway=CHART_SEQUENCE,
         legend=dict(orientation="h", y=-0.18),
     )
-    fig.update_xaxes(gridcolor="#E4E9EF", zeroline=False)
-    fig.update_yaxes(gridcolor="#E4E9EF", zeroline=False)
+    fig.update_xaxes(gridcolor="#050505", zeroline=False)
+    fig.update_yaxes(gridcolor="#050505", zeroline=False)
     return fig
 
 
